@@ -1,0 +1,38 @@
+<resources>
+    <string name="app_name">LGCPD</string>
+
+
+    <string name="facebook_app_id">648225612003672</string>
+
+
+    <!--Login Information-->
+    <string name="login_title">Member Sign In</string>
+    <string name="username_hint">email@example.com</string>
+    <string name="password_hint">Password</string>
+    <string name="login_button">Sign In</string>
+    <string name="forget_password">Forget Password?</string>
+    <string name="or">OR</string>
+    <string name="new_to">New? Sign up here!</string>
+
+    <!--Register information-->
+    <string name="register_title">Member Sign Up</string>
+    <string name="back_to_login">Already a Member? Sign In here!</string>
+    <string name="terms">By Registering you are accepting our Terms and Contition. </string>
+    <string name="sigup_button">Sign Up</string>
+    <string name="password_hint_repeat">Repeat Password</string>
+    <string name="name_hint">Name</string>
+    <string name="address_hint">Address</string>
+    <string name="contact_hint">Contact</string>
+    <string name="assign_type_hint">Assign Type</string>
+    <string name="type_hint">Type</string>
+
+    <!--Forget password-->
+    <string name="forget_title">Forget Your Password?</string>
+    <string name="forget_information">Please enter the email address to retrive your password.</string>
+    <string name="password_recover">Recover</string>
+
+
+    <!--Drawer-->
+    <string name="open_drawer">Open Drawer</string>
+    <string name="close_drawer">Close Drawer</string>
+</resources>

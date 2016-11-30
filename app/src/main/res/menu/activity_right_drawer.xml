@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item android:title="SM">
+            <menu>
+                <item
+                    android:id="@+id/nav_district"
+                    android:title="District" />
+                <item
+                    android:id="@+id/nav_municipality"
+                    android:title="Municipality" />
+
+                <item
+                    android:id="@+id/nav_regional"
+                    android:title="Regional" />
+            </menu>
+        </item>
+
+        <item
+            android:id="@+id/nav_help"
+            android:title="Help" />
+        <item
+            android:id="@+id/nav_about"
+            android:title="About" />
+    </group>
+
+</menu>
