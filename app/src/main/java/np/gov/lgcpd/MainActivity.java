@@ -1,18 +1,22 @@
 package np.gov.lgcpd;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -37,7 +41,7 @@ import np.gov.lgcpd.Login.LoginActivity;
 /**
  * Created by asis on 11/6/16.
  */
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SearchView.OnQueryTextListener{
 
     Toolbar toolbar;
 
@@ -156,7 +160,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-    @Nullable
+
+
     private void chaneTheVisibilityOfSelectedField(final NavigationView nv, MenuItem i){
         nv.getMenu().findItem(R.id.nav_district).setVisible(true);
         nv.getMenu().findItem(R.id.nav_municipality).setVisible(true);
@@ -198,6 +203,11 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main_menu, menu);
+
+        final MenuItem searchItem = menu.findItem(R.id.action_search);
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        searchView.setOnQueryTextListener(this);
+
         return true;
     }
 
@@ -211,7 +221,24 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
 
+        if(id == R.id.action_search){
+
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onQueryTextChange(String query) {
+        adapter.filterRecyclerView(query);
+        return true;
+    }
+
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
     }
 
     @Override
@@ -221,8 +248,25 @@ public class MainActivity extends AppCompatActivity {
         } else if (drawerRight.isDrawerOpen(GravityCompat.END)) {  /*Closes the Appropriate Drawer*/
             drawerRight.closeDrawer(GravityCompat.END);
         } else {
-            super.onBackPressed();
-            System.exit(0);
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(
+                    MainActivity.this);
+
+            alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    finish();
+                }
+            });
+
+            alertDialog.setNegativeButton("No", null);
+
+            alertDialog.setIcon(R.mipmap.ic_launcher);
+
+            alertDialog.setMessage("Do you want to exit?");
+            alertDialog.setTitle(getResources().getString(R.string.app_name));
+
+            alertDialog.show();
         }
     }
 
