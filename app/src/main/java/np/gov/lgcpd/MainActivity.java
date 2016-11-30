@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -15,6 +16,9 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -26,7 +30,7 @@ import java.util.List;
 
 import np.gov.lgcpd.AdaptersAndModel.CardViewAdapterForDistrictAndMunicipality;
 import np.gov.lgcpd.Helper.Constants;
-import np.gov.lgcpd.Helper.JSONParser;
+import np.gov.lgcpd.Helper.NetworkHelper;
 import np.gov.lgcpd.AdaptersAndModel.ModelForCardDistrictMunicipality;
 import np.gov.lgcpd.Login.LoginActivity;
 
@@ -41,6 +45,10 @@ public class MainActivity extends AppCompatActivity {
     private CardViewAdapterForDistrictAndMunicipality adapter;
     private List<ModelForCardDistrictMunicipality> list;
 
+    private LinearLayout no_network_connection;
+    private Button refresh;
+    private String value;
+
     DrawerLayout drawerRight;
     DrawerLayout drawerLeft;
 
@@ -52,14 +60,25 @@ public class MainActivity extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
 
+        no_network_connection = (LinearLayout) findViewById(R.id.no_network_connection);
+        refresh = (Button) findViewById(R.id.refresh);
+        value = Constants.DISTRICT_VALUE;
+
         setRightDrawerLayout();
 
         setLeftDrawerLayout();
 
         setRecycleLayout();
+
+        refresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                populateTheList(value);
+            }
+        });
     }
 
-    public void setRightDrawerLayout(){
+    public void setLeftDrawerLayout(){
         drawerLeft = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -67,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
         drawerLeft.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView leftNavigationView = (NavigationView) findViewById(R.id.nav_left_view);
+        final NavigationView leftNavigationView = (NavigationView) findViewById(R.id.nav_left_view);
         leftNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
@@ -76,8 +95,18 @@ public class MainActivity extends AppCompatActivity {
                 switch (id){
 
                     case R.id.nav_login:
-                        startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                        //startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                        item.setVisible(false);
+
+                        leftNavigationView.getMenu().findItem(R.id.nav_logout).setVisible(true);
                         break;
+                    case R.id.nav_logout:
+                        //startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                        item.setVisible(false);
+
+                        leftNavigationView.getMenu().findItem(R.id.nav_login).setVisible(true);
+                        break;
+
                     default:
                         break;
                 }
@@ -87,10 +116,10 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void setLeftDrawerLayout(){
+    public void setRightDrawerLayout(){
         drawerRight = (DrawerLayout)findViewById(R.id.drawer_layout_right) ;
 
-        NavigationView rightNavigationView = (NavigationView) findViewById(R.id.nav_right_view);
+        final NavigationView rightNavigationView = (NavigationView) findViewById(R.id.nav_right_view);
         rightNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
@@ -99,14 +128,27 @@ public class MainActivity extends AppCompatActivity {
 
                 switch (id){
                     case R.id.nav_district:
+                        rightNavigationView.getMenu().findItem(R.id.right_drawer_title).setTitle("SM - " + item.getTitle());
+                        chaneTheVisibilityOfSelectedField(rightNavigationView,item);
+                        item.setVisible(false);
                         populateTheList(Constants.DISTRICT_VALUE);
                         break;
                     case R.id.nav_municipality:
+                        rightNavigationView.getMenu().findItem(R.id.right_drawer_title).setTitle("SM - " + item.getTitle());
+                        chaneTheVisibilityOfSelectedField(rightNavigationView,item);
+                        item.setVisible(false);
                         populateTheList(Constants.MUNICIPALITY_VALUE);
                         break;
                     case R.id.nav_regional:
+                        rightNavigationView.getMenu().findItem(R.id.right_drawer_title).setTitle("SM - " + item.getTitle());
+                        chaneTheVisibilityOfSelectedField(rightNavigationView,item);
+                        item.setVisible(false);
                         break;
-
+                    case R.id.nav_other:
+                        rightNavigationView.getMenu().findItem(R.id.right_drawer_title).setTitle("SM - " + item.getTitle());
+                        chaneTheVisibilityOfSelectedField(rightNavigationView,item);
+                        item.setVisible(false);
+                        break;
                 }
 
                 drawerRight.closeDrawer(GravityCompat.END); /*Important Line*/
@@ -114,11 +156,18 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+    @Nullable
+    private void chaneTheVisibilityOfSelectedField(final NavigationView nv, MenuItem i){
+        nv.getMenu().findItem(R.id.nav_district).setVisible(true);
+        nv.getMenu().findItem(R.id.nav_municipality).setVisible(true);
+        nv.getMenu().findItem(R.id.nav_regional).setVisible(true);
+        nv.getMenu().findItem(R.id.nav_other).setVisible(true);
+    }
 
     public void setRecycleLayout(){
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
-        populateTheList(Constants.DISTRICT_VALUE);
+        populateTheList(value);
 
         LinearLayoutManager llm = new LinearLayoutManager(this);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
@@ -130,10 +179,19 @@ public class MainActivity extends AppCompatActivity {
 
     public void populateTheList(String value){
         list = new ArrayList<>();
+        this.value = value;
 
-        String URL = Constants.BASE_URL + value;
+        String URL = Constants.BASE_URL + this.value;
 
-        new GetDistrict().execute(URL);
+        if(NetworkHelper.isNetworkAvailable(getApplicationContext())){
+            recyclerView.setVisibility(View.VISIBLE);
+            no_network_connection.setVisibility(View.GONE);
+            new GetDistrict().execute(URL);
+        }else{
+            Toast.makeText(getApplicationContext(),"No Internet Connection",Toast.LENGTH_SHORT).show();
+            no_network_connection.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -184,25 +242,26 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected JSONArray doInBackground(String... params) {
-            return JSONParser.getJSONFromUrlUsingGet(params[0]);
+            return NetworkHelper.getJSONFromUrlUsingGet(params[0]);
         }
 
         @Override
         protected void onPostExecute(JSONArray jsonArray) {
             super.onPostExecute(jsonArray);
 
-            for(int i = 0; i < jsonArray.length(); i++){
-                try {
-                    JSONObject jo = jsonArray.getJSONObject(i);
-                    String type = jo.getString("type");
-                    String region_id = jo.getString("region_id");
-                    String name = jo.getString("name_en");
+            if(jsonArray != null)
+                for(int i = 0; i < jsonArray.length(); i++){
+                    try {
+                        JSONObject jo = jsonArray.getJSONObject(i);
+                        String type = jo.getString("type");
+                        String region_id = jo.getString("region_id");
+                        String name = jo.getString("name_en");
 
-                    ModelForCardDistrictMunicipality m = new ModelForCardDistrictMunicipality(name,type,region_id);
-                    list.add(m);
+                        ModelForCardDistrictMunicipality m = new ModelForCardDistrictMunicipality(name,type,region_id);
+                        list.add(m);
 
-                }catch (JSONException ex){ ex.printStackTrace();}
-            }
+                    }catch (JSONException ex){ ex.printStackTrace();}
+                }
 
             adapter = new CardViewAdapterForDistrictAndMunicipality(getApplicationContext(), list);
             recyclerView.setAdapter(adapter);

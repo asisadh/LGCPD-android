@@ -3,7 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/md_grey_100"
+    >
 
     <!-- The main content view -->
 
@@ -23,13 +25,45 @@
             android:layout_height="match_parent"
             >
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recycler_view"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clipToPadding="false"
-                android:scrollbars="vertical"
-                />
+                android:layout_height="match_parent">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clipToPadding="false"
+                    android:scrollbars="vertical"
+                    />
+                <LinearLayout
+                    android:id="@+id/no_network_connection"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    >
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        android:src="@drawable/no_internet_connection"
+                        />
+
+                    <Button
+                        android:id="@+id/refresh"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Refresh"
+                        android:background="@color/md_green_500"
+                        android:textColor="@color/md_white_1000"
+                        />
+
+                </LinearLayout>
+
+            </RelativeLayout>
 
             <!-- The navigation drawer Right -->
             <android.support.design.widget.NavigationView

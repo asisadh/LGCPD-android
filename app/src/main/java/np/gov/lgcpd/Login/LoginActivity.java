@@ -20,7 +20,7 @@ import java.util.Map;
 
 import np.gov.lgcpd.Encryption.SecurePreferences;
 import np.gov.lgcpd.Helper.Constants;
-import np.gov.lgcpd.Helper.JSONParser;
+import np.gov.lgcpd.Helper.NetworkHelper;
 import np.gov.lgcpd.MainActivity;
 import np.gov.lgcpd.R;
 
@@ -184,7 +184,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             map.put("email",params[1]);
             map.put("password",params[2]);
 
-            return JSONParser.getJSONFromUrlUsingPost(params[0],map);
+            return NetworkHelper.getJSONFromUrlUsingPost(params[0],map);
         }
 
         @Override

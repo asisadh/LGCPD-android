@@ -7,9 +7,13 @@
             android:icon="@drawable/user"
             android:title="LSP" />
         <item
+            android:id="@+id/nav_fav"
+            android:icon="@drawable/user"
+            android:title="Favourite" />
+        <item
             android:id="@+id/nav_save_offline"
             android:icon="@drawable/user"
-            android:title="Save Offline" />
+            android:title="Offline Data" />
     </group>
 
     <item android:title="Communicate">
@@ -18,6 +22,12 @@
                 android:id="@+id/nav_login"
                 android:icon="@drawable/user"
                 android:title="Login" />
+            <item
+                android:id="@+id/nav_logout"
+                android:icon="@drawable/lock"
+                android:title="Logout"
+                android:visible="false"
+                />
             <item
                 android:id="@+id/nav_submit_feedback"
                 android:icon="@drawable/user"

@@ -1,5 +1,8 @@
 package np.gov.lgcpd.Helper;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -23,7 +26,7 @@ import java.util.Map;
 /**
  * Created by asis on 11/26/16.
  */
-public class JSONParser {
+public class NetworkHelper {
 
     static InputStream is = null;
     static JSONObject jObj = null;
@@ -31,7 +34,14 @@ public class JSONParser {
     static String json = "";
 
     // constructor
-    private JSONParser() {}
+    private NetworkHelper() {}
+
+    public static boolean isNetworkAvailable(Context context) {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
 
     public static JSONArray getJSONFromUrlUsingGet(String urlString) {
 
