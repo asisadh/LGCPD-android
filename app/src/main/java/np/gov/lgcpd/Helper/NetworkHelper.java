@@ -45,6 +45,8 @@ public class NetworkHelper {
 
     public static JSONArray getJSONFromUrlUsingGet(String urlString) {
 
+        Log.e("URL: ", urlString);
+
         // Making HTTP request
         try {
             URL url = new URL(urlString);
@@ -82,6 +84,8 @@ public class NetworkHelper {
     }
 
     public static JSONObject getJSONFromUrlUsingPost(String urlString, Map<String,String> params) {
+
+        Log.e("URL: ", urlString);
 
         // Making HTTP request
         try {

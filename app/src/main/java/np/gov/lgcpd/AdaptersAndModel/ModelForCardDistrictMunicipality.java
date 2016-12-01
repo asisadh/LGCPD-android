@@ -5,14 +5,9 @@ package np.gov.lgcpd.AdaptersAndModel;
  */
 public class ModelForCardDistrictMunicipality {
     private String name;
-    private String type;
-    private String region_id;
 
-    public ModelForCardDistrictMunicipality(String name, String type, String region_id){
+    public ModelForCardDistrictMunicipality(String name){
         this.name = name;
-        this.type = type;
-        this.region_id = region_id;
-
     }
 
     public String getName() {
@@ -21,13 +16,5 @@ public class ModelForCardDistrictMunicipality {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public String getRegion_id() {
-        return region_id;
     }
 }

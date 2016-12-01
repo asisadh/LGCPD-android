@@ -3,6 +3,7 @@ package np.gov.lgcpd;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.midi.MidiOutputPort;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -18,6 +19,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -146,11 +148,13 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                     case R.id.nav_regional:
                         rightNavigationView.getMenu().findItem(R.id.right_drawer_title).setTitle("SM - " + item.getTitle());
                         chaneTheVisibilityOfSelectedField(rightNavigationView,item);
+                        Toast.makeText(MainActivity.this,"Regional is not completed, Comming Soon",Toast.LENGTH_SHORT).show();
                         item.setVisible(false);
                         break;
                     case R.id.nav_other:
                         rightNavigationView.getMenu().findItem(R.id.right_drawer_title).setTitle("SM - " + item.getTitle());
                         chaneTheVisibilityOfSelectedField(rightNavigationView,item);
+                        Toast.makeText(MainActivity.this,"Other is not completed, Comming Soon",Toast.LENGTH_SHORT).show();
                         item.setVisible(false);
                         break;
                 }
@@ -160,7 +164,6 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
             }
         });
     }
-
 
     private void chaneTheVisibilityOfSelectedField(final NavigationView nv, MenuItem i){
         nv.getMenu().findItem(R.id.nav_district).setVisible(true);
@@ -183,10 +186,11 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     }
 
     public void populateTheList(String value){
-        list = new ArrayList<>();
+        list = new ArrayList<ModelForCardDistrictMunicipality>();
         this.value = value;
 
-        String URL = Constants.BASE_URL + this.value;
+        String URL = Constants.SM_URL_LIST + this.value;
+        //Log.e("URL : " , Constants.SM_URL + this.value);
 
         if(NetworkHelper.isNetworkAvailable(getApplicationContext())){
             recyclerView.setVisibility(View.VISIBLE);
@@ -197,6 +201,10 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
             no_network_connection.setVisibility(View.VISIBLE);
             recyclerView.setVisibility(View.GONE);
         }
+    }
+
+    public String getValue(){
+        return value;
     }
 
     @Override
@@ -293,21 +301,28 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         protected void onPostExecute(JSONArray jsonArray) {
             super.onPostExecute(jsonArray);
 
-            if(jsonArray != null)
-                for(int i = 0; i < jsonArray.length(); i++){
-                    try {
-                        JSONObject jo = jsonArray.getJSONObject(i);
-                        String type = jo.getString("type");
-                        String region_id = jo.getString("region_id");
-                        String name = jo.getString("name_en");
+            if(jsonArray != null) {
+                if (jsonArray.length() == 0) {
+                    Toast.makeText(getApplicationContext(), "No SM Available", Toast.LENGTH_SHORT).show();
+                    Log.e("NO SM", "I m here");
+                } else {
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        try {
+                            JSONObject jo = jsonArray.getJSONObject(i);
+                            String name = jo.getString("name_en");
 
-                        ModelForCardDistrictMunicipality m = new ModelForCardDistrictMunicipality(name,type,region_id);
-                        list.add(m);
+                            ModelForCardDistrictMunicipality m = new ModelForCardDistrictMunicipality(name);
+                            list.add(m);
 
-                    }catch (JSONException ex){ ex.printStackTrace();}
+                        } catch (JSONException ex) {
+                            ex.printStackTrace();
+                        }
+                    }
                 }
-
+            }
             adapter = new CardViewAdapterForDistrictAndMunicipality(getApplicationContext(), list);
+            adapter.setValue(value);
+            Log.e("Value :", value);
             recyclerView.setAdapter(adapter);
 
             pd.cancel();
