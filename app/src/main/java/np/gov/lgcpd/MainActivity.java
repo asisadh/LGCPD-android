@@ -56,11 +56,13 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
     private LinearLayout no_network_connection;
     private Button refresh;
-    private String value;
+    private String valueThatStoreLSPorSM;
+    private String areaOfSMorLSPToFetchFrom;
 
     DrawerLayout drawerRight;
     DrawerLayout drawerLeft;
     NavigationView leftNavigationView;
+    NavigationView rightNavigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +74,9 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
         no_network_connection = (LinearLayout) findViewById(R.id.no_network_connection);
         refresh = (Button) findViewById(R.id.refresh);
-        value = Constants.DISTRICT_VALUE;
+
+        areaOfSMorLSPToFetchFrom = Constants.DISTRICT_VALUE;
+        valueThatStoreLSPorSM = Constants.SM;
 
         setRightDrawerLayout();
 
@@ -85,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         refresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                populateTheList(value);
+                populateTheList(areaOfSMorLSPToFetchFrom);
             }
         });
     }
@@ -105,6 +109,22 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                 // Handle Left navigation view item clicks here.
                 int id = item.getItemId();
                 switch (id){
+
+                    case R.id.nav_lsp:
+                        valueThatStoreLSPorSM = Constants.LSP;
+                        leftNavigationView.getMenu().findItem(R.id.nav_lsp).setVisible(false);
+                        leftNavigationView.getMenu().findItem(R.id.nav_sm).setVisible(true);
+                        rightNavigationView.getMenu().findItem(R.id.right_drawer_title).setTitle( valueThatStoreLSPorSM.toUpperCase() +" - " + areaOfSMorLSPToFetchFrom );
+                        populateTheList(areaOfSMorLSPToFetchFrom);
+                        break;
+
+                    case R.id.nav_sm:
+                        valueThatStoreLSPorSM = Constants.SM;
+                        leftNavigationView.getMenu().findItem(R.id.nav_lsp).setVisible(true);
+                        leftNavigationView.getMenu().findItem(R.id.nav_sm).setVisible(false);
+                        rightNavigationView.getMenu().findItem(R.id.right_drawer_title).setTitle( valueThatStoreLSPorSM.toUpperCase() +" - " + areaOfSMorLSPToFetchFrom );
+                        populateTheList(areaOfSMorLSPToFetchFrom);
+                        break;
 
                     case R.id.nav_login:
                         startActivity(new Intent(MainActivity.this, LoginActivity.class));
@@ -131,7 +151,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     public void setRightDrawerLayout(){
         drawerRight = (DrawerLayout)findViewById(R.id.drawer_layout_right) ;
 
-        final NavigationView rightNavigationView = (NavigationView) findViewById(R.id.nav_right_view);
+        rightNavigationView = (NavigationView) findViewById(R.id.nav_right_view);
         rightNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
@@ -140,25 +160,25 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
                 switch (id){
                     case R.id.nav_district:
-                        rightNavigationView.getMenu().findItem(R.id.right_drawer_title).setTitle("SM - " + item.getTitle());
+                        rightNavigationView.getMenu().findItem(R.id.right_drawer_title).setTitle( valueThatStoreLSPorSM.toUpperCase() +" - " + item.getTitle());
                         chaneTheVisibilityOfSelectedField(rightNavigationView);
                         item.setVisible(false);
                         populateTheList(Constants.DISTRICT_VALUE);
                         break;
                     case R.id.nav_municipality:
-                        rightNavigationView.getMenu().findItem(R.id.right_drawer_title).setTitle("SM - " + item.getTitle());
+                        rightNavigationView.getMenu().findItem(R.id.right_drawer_title).setTitle(valueThatStoreLSPorSM.toUpperCase() +" - " + item.getTitle());
                         chaneTheVisibilityOfSelectedField(rightNavigationView);
                         item.setVisible(false);
                         populateTheList(Constants.MUNICIPALITY_VALUE);
                         break;
                     case R.id.nav_regional:
-                        rightNavigationView.getMenu().findItem(R.id.right_drawer_title).setTitle("SM - " + item.getTitle());
+                        rightNavigationView.getMenu().findItem(R.id.right_drawer_title).setTitle(valueThatStoreLSPorSM.toUpperCase() +" - " + item.getTitle());
                         chaneTheVisibilityOfSelectedField(rightNavigationView);
                         Toast.makeText(MainActivity.this,"Regional is not completed, Comming Soon",Toast.LENGTH_SHORT).show();
                         item.setVisible(false);
                         break;
                     case R.id.nav_other:
-                        rightNavigationView.getMenu().findItem(R.id.right_drawer_title).setTitle("SM - " + item.getTitle());
+                        rightNavigationView.getMenu().findItem(R.id.right_drawer_title).setTitle(valueThatStoreLSPorSM.toUpperCase() +" - " + item.getTitle());
                         chaneTheVisibilityOfSelectedField(rightNavigationView);
                         Toast.makeText(MainActivity.this,"Other is not completed, Comming Soon",Toast.LENGTH_SHORT).show();
                         item.setVisible(false);
@@ -181,7 +201,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     public void setRecycleLayout(){
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
-        populateTheList(value);
+        populateTheList(areaOfSMorLSPToFetchFrom);
 
         LinearLayoutManager llm = new LinearLayoutManager(this);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
@@ -193,9 +213,9 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
     public void populateTheList(String value){
         list = new ArrayList<ModelForCardDistrictMunicipality>();
-        this.value = value;
+        this.areaOfSMorLSPToFetchFrom = value;
 
-        String URL = Constants.SM_URL_LIST + this.value;
+        String URL = Constants.SM_URL_LIST + this.areaOfSMorLSPToFetchFrom;
         //Log.e("URL : " , Constants.SM_URL + this.value);
 
         if(NetworkHelper.isNetworkAvailable(getApplicationContext())){
@@ -215,7 +235,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         if(prefs.getBoolean("is_already_login", false)){
             View v = leftNavigationView.getHeaderView(0);
             ((TextView)v.findViewById(R.id.name)).setText(prefs.getString("name","Name"));
-            ((TextView)v.findViewById(R.id.email)).setText(prefs.getString("email","email@gmail.com"));
+            ((TextView)v.findViewById(R.id.email)).setText(prefs.getString("username","email@gmail.com"));
             leftNavigationView.getMenu().findItem(R.id.nav_login).setVisible(false);
             leftNavigationView.getMenu().findItem(R.id.nav_logout).setVisible(true);
             leftNavigationView.getMenu().findItem(R.id.nav_admin).setVisible(true);
@@ -226,7 +246,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     protected void onResume() {
         super.onResume();
         checkIfUserIsAlreadyLoggedIn();
-        populateTheList(value);
+        populateTheList(areaOfSMorLSPToFetchFrom);
     }
 
     public void userLogout(){
@@ -239,6 +259,10 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         prefs.edit().putString("address", "").apply();
         prefs.edit().putString("contact", "").apply();
         prefs.edit().putString("auth", "").apply();
+
+        View v = leftNavigationView.getHeaderView(0);
+        ((TextView)v.findViewById(R.id.name)).setText("No Name");
+        ((TextView)v.findViewById(R.id.email)).setText("No email");
     }
 
     @Override
@@ -337,7 +361,6 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
             if(jsonArray != null) {
                 if (jsonArray.length() == 0) {
-                    Toast.makeText(getApplicationContext(), "No SM Available", Toast.LENGTH_SHORT).show();
                     Log.e("NO SM", "I m here");
                 } else {
                     for (int i = 0; i < jsonArray.length(); i++) {
@@ -355,8 +378,8 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                 }
             }
             adapter = new CardViewAdapterForDistrictAndMunicipality(getApplicationContext(), list);
-            adapter.setValue(value);
-            Log.e("Value :", value);
+            adapter.setArea(areaOfSMorLSPToFetchFrom);
+            adapter.setSM_LSP(valueThatStoreLSPorSM);
             recyclerView.setAdapter(adapter);
 
             pd.cancel();

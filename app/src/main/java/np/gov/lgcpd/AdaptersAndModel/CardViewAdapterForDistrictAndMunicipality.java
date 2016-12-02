@@ -7,10 +7,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import np.gov.lgcpd.Helper.Constants;
+import np.gov.lgcpd.LSP.LSPListActivity;
 import np.gov.lgcpd.R;
 import np.gov.lgcpd.SM.SMListActivity;
 
@@ -22,7 +25,8 @@ public class CardViewAdapterForDistrictAndMunicipality extends RecyclerView.Adap
     private List<ModelForCardDistrictMunicipality> list;
     private List<ModelForCardDistrictMunicipality> originalList;
 
-    private String value;
+    private String area;
+    private String sm_lsp;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView name;
@@ -33,19 +37,30 @@ public class CardViewAdapterForDistrictAndMunicipality extends RecyclerView.Adap
 
             view.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {
-                    //String value = ((MainActivity)context).getValue();
-                    context.startActivity(new Intent(context,SMListActivity.class)
-                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                            .putExtra("value",value)
-                            .putExtra("name",list.get(getAdapterPosition()).getName()));
+                    if(sm_lsp.equals(Constants.SM)) {
+                        context.startActivity(new Intent(context, SMListActivity.class)
+                                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                .putExtra("value", area)
+                                .putExtra("name", list.get(getAdapterPosition()).getName()));
+                    }else{
+//                        context.startActivity(new Intent(context,LSPListActivity.class)
+//                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+//                            .putExtra("value",area)
+//                            .putExtra("name",list.get(getAdapterPosition()).getName()));
+                        Toast.makeText(context,"this is LSP",Toast.LENGTH_SHORT).show();
+                    }
                 }
             });
         }
 
     }
 
-    public void setValue(String s){
-        value = s;
+    public void setArea(String s){
+        area = s;
+    }
+
+    public void setSM_LSP(String s){
+        sm_lsp = s;
     }
 
     public CardViewAdapterForDistrictAndMunicipality(Context context, List<ModelForCardDistrictMunicipality> list) {

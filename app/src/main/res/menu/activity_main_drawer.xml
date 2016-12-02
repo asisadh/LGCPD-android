@@ -6,6 +6,14 @@
             android:id="@+id/nav_lsp"
             android:icon="@drawable/user"
             android:title="LSP" />
+
+        <item
+            android:id="@+id/nav_sm"
+            android:icon="@drawable/user"
+            android:title="SM"
+            android:visible="false"
+            />
+
         <item
             android:id="@+id/nav_fav"
             android:icon="@drawable/user"

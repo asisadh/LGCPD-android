@@ -18,6 +18,8 @@ public class Constants {
     public static String DISTRICT_VALUE = "district";
     public static String MUNICIPALITY_VALUE = "munic";
 
+    public static String SM = "sm";
+    public static String LSP = "lsp";
 
     public static String SHARED_PREFRENCE_PASSWORD = "bvRL9M1Td3uucVDr";
 }
