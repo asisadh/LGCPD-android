@@ -3,6 +3,7 @@ package np.gov.lgcpd;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.midi.MidiOutputPort;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -25,6 +26,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -35,6 +37,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import np.gov.lgcpd.AdaptersAndModel.CardViewAdapterForDistrictAndMunicipality;
+import np.gov.lgcpd.Encryption.SecurePreferences;
 import np.gov.lgcpd.Helper.Constants;
 import np.gov.lgcpd.Helper.NetworkHelper;
 import np.gov.lgcpd.AdaptersAndModel.ModelForCardDistrictMunicipality;
@@ -57,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
     DrawerLayout drawerRight;
     DrawerLayout drawerLeft;
+    NavigationView leftNavigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +80,8 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
         setRecycleLayout();
 
+        checkIfUserIsAlreadyLoggedIn();
+
         refresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -92,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         drawerLeft.setDrawerListener(toggle);
         toggle.syncState();
 
-        final NavigationView leftNavigationView = (NavigationView) findViewById(R.id.nav_left_view);
+        leftNavigationView = (NavigationView) findViewById(R.id.nav_left_view);
         leftNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
@@ -101,16 +107,17 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                 switch (id){
 
                     case R.id.nav_login:
-                        //startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                        item.setVisible(false);
+                        finish();
+                        startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                        //item.setVisible(false);
 
-                        leftNavigationView.getMenu().findItem(R.id.nav_logout).setVisible(true);
+                       // leftNavigationView.getMenu().findItem(R.id.nav_logout).setVisible(true);
                         break;
                     case R.id.nav_logout:
                         //startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                        item.setVisible(false);
+                        //item.setVisible(false);
 
-                        leftNavigationView.getMenu().findItem(R.id.nav_login).setVisible(true);
+                        //leftNavigationView.getMenu().findItem(R.id.nav_login).setVisible(true);
                         break;
 
                     default:
@@ -275,6 +282,16 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
             alertDialog.setTitle(getResources().getString(R.string.app_name));
 
             alertDialog.show();
+        }
+    }
+
+    private void checkIfUserIsAlreadyLoggedIn(){
+        SharedPreferences prefs = new SecurePreferences(MainActivity.this, Constants.SHARED_PREFRENCE_PASSWORD, Constants.SHARED_PREFRENCE_LOGIN_INFORMATION);
+
+        if(prefs.getBoolean("is_already_login", false)){
+            View v = leftNavigationView.getHeaderView(0);
+            ((TextView)v.findViewById(R.id.name)).setText(prefs.getString("name","Name"));
+            ((TextView)v.findViewById(R.id.email)).setText(prefs.getString("email","email@gmail.com"));
         }
     }
 

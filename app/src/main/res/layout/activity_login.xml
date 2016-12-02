@@ -65,17 +65,6 @@
                 android:text="khurshid00"
                 />
         </android.support.design.widget.TextInputLayout>
-        <TextView
-            android:id="@+id/forget_password"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/forget_password"
-            android:textColor="@color/md_white_1000"
-            android:textStyle="bold"
-            android:layout_gravity="start"
-            android:layout_marginTop="10dp"
-            android:textSize="15sp"
-            />
 
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/login"
@@ -104,17 +93,7 @@
             android:background="#c0c0c0"
             android:layout_gravity="center_vertical"
             />
-        <TextView
-            android:id="@+id/sign_up"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/new_to"
-            android:textColor="@color/md_yellow_600"
-            android:textStyle="bold"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="5dp"
-            android:textSize="15sp"
-            />
+
 
     </LinearLayout>
 

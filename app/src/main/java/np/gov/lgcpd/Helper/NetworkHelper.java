@@ -85,14 +85,14 @@ public class NetworkHelper {
 
     public static JSONObject getJSONFromUrlUsingPost(String urlString, Map<String,String> params) {
 
-        Log.e("URL: ", urlString);
-
         // Making HTTP request
         try {
             URL url = new URL(urlString);
             HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
             httpURLConnection.setRequestMethod("POST");
             httpURLConnection.setRequestProperty("Accept","*/*");
+            httpURLConnection.setDoOutput(true);
+            httpURLConnection.setDoInput(true);
 
             StringBuilder stringbuilder = new StringBuilder();
 
@@ -109,9 +109,15 @@ public class NetworkHelper {
 
             System.out.println(stringbuilder.toString());
 
-            httpURLConnection.setRequestProperty("Content-Length", String.valueOf(postDataBytes.length));
-            httpURLConnection.setDoOutput(true);
-            httpURLConnection.getOutputStream().write(postDataBytes);
+           // httpURLConnection.setRequestProperty("Content-Length", String.valueOf(postDataBytes.length));
+           // httpURLConnection.getOutputStream().write(postDataBytes);
+
+            System.out.println("this is connection "+httpURLConnection);
+            Log.e("this is connection ",httpURLConnection.toString());
+            InputStream errorstream = httpURLConnection.getErrorStream();
+            Log.e("GetErrorStream : ", errorstream.toString());
+            System.out.println("GetErrorStream "+errorstream);
+            Log.e("GetResponseCode: ", String.valueOf(httpURLConnection.getResponseCode()) );
 
             is = httpURLConnection.getInputStream();
         } catch (UnsupportedEncodingException e) {
@@ -138,8 +144,7 @@ public class NetworkHelper {
         } catch (JSONException e) {
             Log.e("JSON Parser", "Error parsing data " + e.toString());
         }
-        // return JSON String
-        System.out.println(jObj.toString());
+
         return jObj;
 
     }
