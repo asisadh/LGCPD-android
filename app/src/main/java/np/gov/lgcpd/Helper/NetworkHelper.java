@@ -91,8 +91,6 @@ public class NetworkHelper {
             HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
             httpURLConnection.setRequestMethod("POST");
             httpURLConnection.setRequestProperty("Accept","*/*");
-            httpURLConnection.setDoOutput(true);
-            httpURLConnection.setDoInput(true);
 
             StringBuilder stringbuilder = new StringBuilder();
 
@@ -109,14 +107,11 @@ public class NetworkHelper {
 
             System.out.println(stringbuilder.toString());
 
-           // httpURLConnection.setRequestProperty("Content-Length", String.valueOf(postDataBytes.length));
-           // httpURLConnection.getOutputStream().write(postDataBytes);
+            httpURLConnection.setRequestProperty("Content-Length", String.valueOf(postDataBytes.length));
+            httpURLConnection.getOutputStream().write(postDataBytes);
 
             System.out.println("this is connection "+httpURLConnection);
             Log.e("this is connection ",httpURLConnection.toString());
-            InputStream errorstream = httpURLConnection.getErrorStream();
-            Log.e("GetErrorStream : ", errorstream.toString());
-            System.out.println("GetErrorStream "+errorstream);
             Log.e("GetResponseCode: ", String.valueOf(httpURLConnection.getResponseCode()) );
 
             is = httpURLConnection.getInputStream();

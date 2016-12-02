@@ -7,7 +7,7 @@ public class Constants {
 
     public static String BASE_URL = "http://api.dev/public/";
     //public static String BASE_URL = "http://sanzay.com.np/lgcpd/public/";
-    public static String LOGIN_URL = BASE_URL + "login/";
+    public static String LOGIN_URL = BASE_URL + "login";
     public static String SM_URL_LIST = BASE_URL + "api/list/";
     public static String SM_API = BASE_URL + "api/sm/";
 

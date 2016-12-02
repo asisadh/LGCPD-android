@@ -107,17 +107,16 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                 switch (id){
 
                     case R.id.nav_login:
-                        finish();
                         startActivity(new Intent(MainActivity.this, LoginActivity.class));
                         //item.setVisible(false);
 
                        // leftNavigationView.getMenu().findItem(R.id.nav_logout).setVisible(true);
                         break;
                     case R.id.nav_logout:
-                        //startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                        //item.setVisible(false);
-
-                        //leftNavigationView.getMenu().findItem(R.id.nav_login).setVisible(true);
+                        userLogout();
+                        item.setVisible(false);
+                        leftNavigationView.getMenu().findItem(R.id.nav_login).setVisible(true);
+                        leftNavigationView.getMenu().findItem(R.id.nav_admin).setVisible(false);
                         break;
 
                     default:
@@ -142,25 +141,25 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                 switch (id){
                     case R.id.nav_district:
                         rightNavigationView.getMenu().findItem(R.id.right_drawer_title).setTitle("SM - " + item.getTitle());
-                        chaneTheVisibilityOfSelectedField(rightNavigationView,item);
+                        chaneTheVisibilityOfSelectedField(rightNavigationView);
                         item.setVisible(false);
                         populateTheList(Constants.DISTRICT_VALUE);
                         break;
                     case R.id.nav_municipality:
                         rightNavigationView.getMenu().findItem(R.id.right_drawer_title).setTitle("SM - " + item.getTitle());
-                        chaneTheVisibilityOfSelectedField(rightNavigationView,item);
+                        chaneTheVisibilityOfSelectedField(rightNavigationView);
                         item.setVisible(false);
                         populateTheList(Constants.MUNICIPALITY_VALUE);
                         break;
                     case R.id.nav_regional:
                         rightNavigationView.getMenu().findItem(R.id.right_drawer_title).setTitle("SM - " + item.getTitle());
-                        chaneTheVisibilityOfSelectedField(rightNavigationView,item);
+                        chaneTheVisibilityOfSelectedField(rightNavigationView);
                         Toast.makeText(MainActivity.this,"Regional is not completed, Comming Soon",Toast.LENGTH_SHORT).show();
                         item.setVisible(false);
                         break;
                     case R.id.nav_other:
                         rightNavigationView.getMenu().findItem(R.id.right_drawer_title).setTitle("SM - " + item.getTitle());
-                        chaneTheVisibilityOfSelectedField(rightNavigationView,item);
+                        chaneTheVisibilityOfSelectedField(rightNavigationView);
                         Toast.makeText(MainActivity.this,"Other is not completed, Comming Soon",Toast.LENGTH_SHORT).show();
                         item.setVisible(false);
                         break;
@@ -172,7 +171,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         });
     }
 
-    private void chaneTheVisibilityOfSelectedField(final NavigationView nv, MenuItem i){
+    private void chaneTheVisibilityOfSelectedField(final NavigationView nv){
         nv.getMenu().findItem(R.id.nav_district).setVisible(true);
         nv.getMenu().findItem(R.id.nav_municipality).setVisible(true);
         nv.getMenu().findItem(R.id.nav_regional).setVisible(true);
@@ -210,8 +209,36 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         }
     }
 
-    public String getValue(){
-        return value;
+    private void checkIfUserIsAlreadyLoggedIn(){
+        SharedPreferences prefs = new SecurePreferences(MainActivity.this, Constants.SHARED_PREFRENCE_PASSWORD, Constants.SHARED_PREFRENCE_LOGIN_INFORMATION);
+
+        if(prefs.getBoolean("is_already_login", false)){
+            View v = leftNavigationView.getHeaderView(0);
+            ((TextView)v.findViewById(R.id.name)).setText(prefs.getString("name","Name"));
+            ((TextView)v.findViewById(R.id.email)).setText(prefs.getString("email","email@gmail.com"));
+            leftNavigationView.getMenu().findItem(R.id.nav_login).setVisible(false);
+            leftNavigationView.getMenu().findItem(R.id.nav_logout).setVisible(true);
+            leftNavigationView.getMenu().findItem(R.id.nav_admin).setVisible(true);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        checkIfUserIsAlreadyLoggedIn();
+        populateTheList(value);
+    }
+
+    public void userLogout(){
+        SharedPreferences prefs = new SecurePreferences(MainActivity.this, Constants.SHARED_PREFRENCE_PASSWORD, Constants.SHARED_PREFRENCE_LOGIN_INFORMATION);
+
+        prefs.edit().putBoolean("is_already_login",false).apply();
+        prefs.edit().putString("id", "").apply();
+        prefs.edit().putString("name", "").apply();
+        prefs.edit().putString("username", "").apply();
+        prefs.edit().putString("address", "").apply();
+        prefs.edit().putString("contact", "").apply();
+        prefs.edit().putString("auth", "").apply();
     }
 
     @Override
@@ -282,16 +309,6 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
             alertDialog.setTitle(getResources().getString(R.string.app_name));
 
             alertDialog.show();
-        }
-    }
-
-    private void checkIfUserIsAlreadyLoggedIn(){
-        SharedPreferences prefs = new SecurePreferences(MainActivity.this, Constants.SHARED_PREFRENCE_PASSWORD, Constants.SHARED_PREFRENCE_LOGIN_INFORMATION);
-
-        if(prefs.getBoolean("is_already_login", false)){
-            View v = leftNavigationView.getHeaderView(0);
-            ((TextView)v.findViewById(R.id.name)).setText(prefs.getString("name","Name"));
-            ((TextView)v.findViewById(R.id.email)).setText(prefs.getString("email","email@gmail.com"));
         }
     }
 

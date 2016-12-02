@@ -32,6 +32,8 @@ public class LoginActivity extends AppCompatActivity{
     private EditText email, password;
     private Button login;
 
+    ProgressDialog pd;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +56,13 @@ public class LoginActivity extends AppCompatActivity{
     }
 
     private void startLogin(){
+
+        pd = new ProgressDialog(LoginActivity.this);
+        pd.setTitle("Login in Progress");
+        pd.setMessage("Connecting to server");
+        pd.setCancelable(false);
+        pd.show();
+
         String txt_email = email.getText().toString();
         String txt_password = password.getText().toString();
         if(!txt_email.equals("") && !txt_password.equals("") ){
@@ -63,10 +72,17 @@ public class LoginActivity extends AppCompatActivity{
         }
     }
 
+    private void onSuccess(){
+        finish();
+    }
+
+    private void onFailed(){
+        Toast.makeText(getApplicationContext(),"Login Failed",Toast.LENGTH_SHORT).show();
+    }
+
 
     private class LoginAsyncTask extends AsyncTask<String, Void, String> {
 
-        ProgressDialog pd;
         String code,status,data ;
         String id, username, name, address, contact, auth;
         SharedPreferences prefs;
@@ -74,18 +90,14 @@ public class LoginActivity extends AppCompatActivity{
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            pd = new ProgressDialog(LoginActivity.this);
+
             pd.setTitle("Login in Progress");
-            pd.setMessage("Connecting to server");
-            pd.setCancelable(false);
-            pd.show();
+            pd.setMessage("Waiting For Server Response");
 
             prefs = new SecurePreferences(LoginActivity.this, Constants.SHARED_PREFRENCE_PASSWORD, Constants.SHARED_PREFRENCE_LOGIN_INFORMATION);
         }
 
         private String parseJSONObjectAndStorePreference(JSONObject jo){
-            pd.setMessage("Reteriving User Information");
-
             status = "false";
 
             if (jo != null){
@@ -114,7 +126,7 @@ public class LoginActivity extends AppCompatActivity{
                     prefs.edit().putString("username", username).apply();
                     prefs.edit().putString("address", address).apply();
                     prefs.edit().putString("contact", contact).apply();
-                   // prefs.edit().putString("auth", auth).apply();
+                    prefs.edit().putString("auth", auth).apply();
                 }
             }
 
@@ -123,8 +135,6 @@ public class LoginActivity extends AppCompatActivity{
 
         @Override
         protected String doInBackground(String... params) {
-
-            pd.setMessage("Server is finishing the login process");
 
             Map map = new HashMap<String,String>();
             map.put("email",params[1]);
@@ -145,9 +155,9 @@ public class LoginActivity extends AppCompatActivity{
             pd.cancel();
 
             if (status.equals("true"))
-                Toast.makeText(getApplicationContext(),"Success",Toast.LENGTH_SHORT).show();
+                onSuccess();
             else
-                Toast.makeText(getApplicationContext(),"Failed",Toast.LENGTH_SHORT).show();
+                onFailed();
         }
     }
 
