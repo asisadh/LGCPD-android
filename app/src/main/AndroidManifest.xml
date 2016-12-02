@@ -23,7 +23,9 @@
         </activity>
         <activity android:name=".Login.LoginActivity"/>
         <activity android:name=".SM.SMListActivity"/>
+        <activity android:name=".LSP.LSPListActivity"/>
         <activity android:name=".SM.SMDetailActivity"/>
+        <activity android:name=".LSP.LSPDetailActivity"/>
     </application>
 
 </manifest>

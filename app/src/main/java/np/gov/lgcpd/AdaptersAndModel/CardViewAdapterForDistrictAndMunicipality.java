@@ -43,10 +43,10 @@ public class CardViewAdapterForDistrictAndMunicipality extends RecyclerView.Adap
                                 .putExtra("value", area)
                                 .putExtra("name", list.get(getAdapterPosition()).getName()));
                     }else{
-//                        context.startActivity(new Intent(context,LSPListActivity.class)
-//                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-//                            .putExtra("value",area)
-//                            .putExtra("name",list.get(getAdapterPosition()).getName()));
+                        context.startActivity(new Intent(context,LSPListActivity.class)
+                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                            .putExtra("value",area)
+                            .putExtra("name",list.get(getAdapterPosition()).getName()));
                         Toast.makeText(context,"this is LSP",Toast.LENGTH_SHORT).show();
                     }
                 }

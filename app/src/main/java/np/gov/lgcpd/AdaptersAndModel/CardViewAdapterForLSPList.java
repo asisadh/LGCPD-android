@@ -12,13 +12,20 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import np.gov.lgcpd.LSP.LSPDetailActivity;
 import np.gov.lgcpd.R;
 import np.gov.lgcpd.SM.SMDetailActivity;
 
 /**
  * Created by asis on 11/30/16.
  */
-public class CardViewAdapterForSMList extends RecyclerView.Adapter<CardViewAdapterForSMList.ViewHolder> {
+public class CardViewAdapterForLSPList extends RecyclerView.Adapter<CardViewAdapterForLSPList.ViewHolder> {
+
+
+    /**
+     *
+     * View Of SM are used as they are just place holder
+     * */
 
     private Context context;
     private List<SM> list;
@@ -40,7 +47,7 @@ public class CardViewAdapterForSMList extends RecyclerView.Adapter<CardViewAdapt
             view.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {
                     Toast.makeText(context,"View Clicked = " + list.get(getAdapterPosition()).getName(),Toast.LENGTH_LONG).show();
-                    context.startActivity(new Intent(context, SMDetailActivity.class)
+                    context.startActivity(new Intent(context, LSPDetailActivity.class)
                             .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                             .putExtra("id",list.get(getAdapterPosition()).getId())
                     );
@@ -50,7 +57,7 @@ public class CardViewAdapterForSMList extends RecyclerView.Adapter<CardViewAdapt
 
     }
 
-    public CardViewAdapterForSMList(Context context, List<SM> list) {
+    public CardViewAdapterForLSPList(Context context, List<SM> list) {
         this.context = context;
         this.list = list;
         this.originalList = new ArrayList<SM>();
