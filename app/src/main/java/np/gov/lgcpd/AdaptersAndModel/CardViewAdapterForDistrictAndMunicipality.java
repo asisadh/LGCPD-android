@@ -3,20 +3,16 @@ package np.gov.lgcpd.AdaptersAndModel;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Filter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import np.gov.lgcpd.MainActivity;
 import np.gov.lgcpd.R;
-import np.gov.lgcpd.SMListActivity;
+import np.gov.lgcpd.SM.SMListActivity;
 
 /**
  * Created by asis on 11/29/16.

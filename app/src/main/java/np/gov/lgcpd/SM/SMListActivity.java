@@ -1,4 +1,4 @@
-package np.gov.lgcpd;
+package np.gov.lgcpd.SM;
 
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
@@ -24,12 +24,11 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import np.gov.lgcpd.AdaptersAndModel.CardViewAdapterForDistrictAndMunicipality;
 import np.gov.lgcpd.AdaptersAndModel.CardViewAdapterForSMList;
-import np.gov.lgcpd.AdaptersAndModel.ModelForCardDistrictMunicipality;
 import np.gov.lgcpd.AdaptersAndModel.SM;
 import np.gov.lgcpd.Helper.Constants;
 import np.gov.lgcpd.Helper.NetworkHelper;
+import np.gov.lgcpd.R;
 
 /**
  * Created by asis on 11/30/16.
@@ -157,7 +156,7 @@ public class SMListActivity extends AppCompatActivity implements SearchView.OnQu
 
         @Override
         protected JSONArray doInBackground(String... params) {
-            return NetworkHelper.getJSONFromUrlUsingGet(params[0]);
+            return NetworkHelper.getJSONArrayFromUrlUsingGet(params[0]);
         }
 
         @Override

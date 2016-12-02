@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import np.gov.lgcpd.R;
-import np.gov.lgcpd.SMListActivity;
+import np.gov.lgcpd.SM.SMDetailActivity;
 
 /**
  * Created by asis on 11/30/16.
@@ -40,6 +40,10 @@ public class CardViewAdapterForSMList extends RecyclerView.Adapter<CardViewAdapt
             view.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {
                     Toast.makeText(context,"View Clicked = " + list.get(getAdapterPosition()).getName(),Toast.LENGTH_LONG).show();
+                    context.startActivity(new Intent(context, SMDetailActivity.class)
+                            .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                            .putExtra("id",list.get(getAdapterPosition()).getId())
+                    );
                     //context.startActivity(new Intent(context,SMListActivity.class));
                 }
             });

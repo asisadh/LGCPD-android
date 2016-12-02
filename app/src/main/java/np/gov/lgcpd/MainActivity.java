@@ -328,7 +328,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
         @Override
         protected JSONArray doInBackground(String... params) {
-            return NetworkHelper.getJSONFromUrlUsingGet(params[0]);
+            return NetworkHelper.getJSONArrayFromUrlUsingGet(params[0]);
         }
 
         @Override

@@ -10,6 +10,7 @@ public class Constants {
     public static String LOGIN_URL = BASE_URL + "login";
     public static String SM_URL_LIST = BASE_URL + "api/list/";
     public static String SM_API = BASE_URL + "api/sm/";
+    public static String SM_DETAIL_API = BASE_URL + "api/detail/sm/";
 
     public static String SHARED_PREFRENCE_LOGIN_INFORMATION = "LGCPD_USER";
     public static String SHARED_PREFRENCE_SPLASH_INFORMATION = "LGCPD_SPLASH";
