@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import java.util.ArrayList;
 import java.util.List;
 
+import np.gov.lgcpd.AdaptersAndModel.LSPDetail;
 import np.gov.lgcpd.AdaptersAndModel.SM;
 import np.gov.lgcpd.AdaptersAndModel.SMDetails;
 
@@ -29,7 +30,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_QUESTIONS_TABLE = "CREATE TABLE " + TABLE_NAME_SM + "("
+        String CREATE_SM_TABLE = "CREATE TABLE " + TABLE_NAME_SM + "("
                 + "id" + " INTEGER PRIMARY KEY,"
                 +"id_remote" + TEXT_TYPE + COMMA_SEP
                 + "name" + TEXT_TYPE + COMMA_SEP
@@ -55,13 +56,31 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + "type"+ TEXT_TYPE
                 + ")";
 
-        db.execSQL(CREATE_QUESTIONS_TABLE);
+        String CREATE_LSP_TABLE = "CREATE TABLE " + TABLE_NAME_LSP + "("
+                + "id" + " INTEGER PRIMARY KEY,"
+                +"id_remote" + TEXT_TYPE + COMMA_SEP
+                +"name" + TEXT_TYPE + COMMA_SEP
+                +"address" + TEXT_TYPE + COMMA_SEP
+                +"office_phone" + TEXT_TYPE + COMMA_SEP
+                +"contact_person" + TEXT_TYPE + COMMA_SEP
+                +"chairman" + TEXT_TYPE + COMMA_SEP
+                +"contact_email" + TEXT_TYPE + COMMA_SEP
+                +"contact_phone" + TEXT_TYPE + COMMA_SEP
+                +"contact_mobile" + TEXT_TYPE + COMMA_SEP
+                +"chairman_mobile" + TEXT_TYPE + COMMA_SEP
+                +"chairman_email" +TEXT_TYPE + COMMA_SEP
+                +"remark" + TEXT_TYPE
+                + ")";
+
+        db.execSQL(CREATE_SM_TABLE);
+        db.execSQL(CREATE_LSP_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // Drop older table if existed
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_SM);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_LSP);
 
         // Create tables again
         onCreate(db);
@@ -117,6 +136,46 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     }
 
+    public boolean addLSP(LSPDetail lsp){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        String Query = "Select * from " + TABLE_NAME_LSP + " where " + "id_remote" + " = " + lsp.getId();
+        Cursor cursor = db.rawQuery(Query, null);
+
+        if(cursor.getCount() <= 0){
+
+            values.put("id_remote", lsp.getId());
+            values.put("name", lsp.getName());
+            values.put("address",lsp.getAddress());
+            values.put("office_phone",lsp.getOfficePhone());
+            values.put("contact_person",lsp.getContactPerson());
+            values.put("chairman",lsp.getChairman());
+            values.put("contact_email",lsp.getChairmanEmail());
+            values.put("contact_phone",lsp.getContactPhone());
+            values.put("contact_mobile",lsp.getContactMobile());
+            values.put("chairman_mobile",lsp.getChairmanMobile());
+            values.put("chairman_email",lsp.getChairmanEmail());
+            values.put("remark",lsp.getRemark());
+
+            db.insert(TABLE_NAME_LSP, null, values);
+            db.close();
+
+            cursor.close();
+            return true;
+        }
+        cursor.close();
+        return false;
+
+    }
+
+    public boolean deleteLSP(String id){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        return db.delete(TABLE_NAME_LSP, "id_remote" + "=" + id, null) > 0;
+
+    }
+
     public SMDetails getSM(String id){
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -162,10 +221,73 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return d;
     }
 
+    public LSPDetail getLSP(String id){
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(TABLE_NAME_LSP,
+                new String[] {   "id",
+                        "id_remote",
+                        "name",
+                        "address",
+                        "office_phone",
+                        "contact_person",
+                        "chairman",
+                        "contact_email",
+                        "contact_phone",
+                        "contact_mobile",
+                        "chairman_mobile",
+                        "chairman_email",
+                        "remark"
+                },
+                "id_remote" + "=?",
+                new String[] { String.valueOf(id) },
+                null, null, null, null);
+        if (cursor != null)
+            cursor.moveToFirst();
+
+        LSPDetail d = new LSPDetail(
+                cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4),
+                cursor.getString(5), cursor.getString(6), cursor.getString(7), cursor.getString(8),
+                cursor.getString(9), cursor.getString(10), cursor.getString(11), cursor.getString(12)
+        );
+        return d;
+    }
+
     public List<SM> getAllSM(){
         List<SM> list = new ArrayList<SM>();
         // Select All Query
         String selectQuery = "SELECT  id_remote,name,phone,address,vdc FROM " + TABLE_NAME_SM ;
+        //+ "Where subject =" + subject;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                SM d = new SM();
+
+                d.setId(cursor.getString(0));
+                d.setName(cursor.getString(1));
+                d.setPhone(cursor.getString(2));
+                d.setAddress(cursor.getString(3));
+                d.setVdc_ward(cursor.getString(4));
+
+                // Adding contact to list
+                list.add(d);
+            } while (cursor.moveToNext());
+        }
+
+        db.close();
+        cursor.close();
+
+        return list;
+    }
+
+    public List<SM> getAllLSP(){
+        List<SM> list = new ArrayList<SM>();
+        // Select All Query
+        String selectQuery = "SELECT  id_remote,name,office_phone,address,contact_email FROM " + TABLE_NAME_LSP ;
         //+ "Where subject =" + subject;
 
         SQLiteDatabase db = this.getReadableDatabase();

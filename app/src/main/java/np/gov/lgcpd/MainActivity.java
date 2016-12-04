@@ -65,6 +65,8 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     NavigationView leftNavigationView;
     NavigationView rightNavigationView;
 
+    private boolean isLoginPressed;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,6 +96,8 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                 populateTheList(areaOfSMorLSPToFetchFrom);
             }
         });
+
+        isLoginPressed = false;
     }
 
     public void setLeftDrawerLayout(){
@@ -143,6 +147,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                         break;
 
                     case R.id.nav_login:
+                        isLoginPressed = true;
                         startActivity(new Intent(MainActivity.this, LoginActivity.class));
                         break;
                     case R.id.nav_logout:
@@ -266,8 +271,11 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     @Override
     protected void onResume() {
         super.onResume();
-        checkIfUserIsAlreadyLoggedIn();
-        populateTheList(areaOfSMorLSPToFetchFrom);
+        if(isLoginPressed) {
+            checkIfUserIsAlreadyLoggedIn();
+            populateTheList(areaOfSMorLSPToFetchFrom);
+        }
+        isLoginPressed = false;
     }
 
     public void userLogout(){

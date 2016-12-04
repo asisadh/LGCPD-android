@@ -32,7 +32,13 @@ public class FavouriteListActivity extends AppCompatActivity implements SearchVi
     private RecyclerView recyclerView;
     private CardViewAdapterForSMAndLSPList adapter;
 
-   // private String value;
+    private boolean isSM;
+    private String value;
+
+    MenuItem lsp,sm;
+
+    public FavouriteListActivity() {
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +51,8 @@ public class FavouriteListActivity extends AppCompatActivity implements SearchVi
         getSupportActionBar().setTitle("Favourite -SM");
 
         setRecycleView();
+
+        isSM = true;
     }
 
     public void setRecycleView(){
@@ -67,11 +75,14 @@ public class FavouriteListActivity extends AppCompatActivity implements SearchVi
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.sm_menu, menu);
+        getMenuInflater().inflate(R.menu.favourite_menu, menu);
 
         final MenuItem searchItem = menu.findItem(R.id.action_search);
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
         searchView.setOnQueryTextListener(this);
+
+        lsp = menu.findItem(R.id.action_lsp);
+        sm = menu.findItem(R.id.action_sm);
 
         return true;
     }
@@ -83,6 +94,23 @@ public class FavouriteListActivity extends AppCompatActivity implements SearchVi
 
         if (id==android.R.id.home) {
             finish();
+        }
+
+        if (id == R.id.action_lsp){
+            item.setVisible(false);
+            sm.setVisible(true);
+            isSM = false;
+            getSupportActionBar().setTitle("Favourite -LSP");
+            new GetSM().execute();
+
+        }
+
+        if( id == R.id.action_sm){
+            item.setVisible(false);
+            lsp.setVisible(true);
+            isSM = true;
+            getSupportActionBar().setTitle("Favourite -SM");
+            new GetSM().execute();
         }
 
         return super.onOptionsItemSelected(item);
@@ -123,7 +151,10 @@ public class FavouriteListActivity extends AppCompatActivity implements SearchVi
         @Override
         protected List<SM> doInBackground(String... params) {
             DatabaseHandler handler = new DatabaseHandler(getApplicationContext(), Constants.DATABASE_NAME, null, Constants.DATABASE_VERSION);
-            return handler.getAllSM();
+
+            if(isSM)
+                return handler.getAllSM();
+            return handler.getAllLSP();
         }
 
         @Override
@@ -136,6 +167,7 @@ public class FavouriteListActivity extends AppCompatActivity implements SearchVi
             else {
                 adapter = new CardViewAdapterForSMAndLSPList(getApplicationContext(), list);
                 adapter.setFromFavourite(true);
+                adapter.isSM(isSM);
                 recyclerView.setAdapter(adapter);
             }
             pd.cancel();

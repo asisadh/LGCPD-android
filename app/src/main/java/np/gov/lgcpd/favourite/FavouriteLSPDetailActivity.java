@@ -1,4 +1,4 @@
-package np.gov.lgcpd.LSP;
+package np.gov.lgcpd.favourite;
 
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
@@ -8,13 +8,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import np.gov.lgcpd.AdaptersAndModel.LSPDetail;
-import np.gov.lgcpd.AdaptersAndModel.SMDetails;
 import np.gov.lgcpd.Helper.Constants;
 import np.gov.lgcpd.Helper.NetworkHelper;
 import np.gov.lgcpd.R;
@@ -23,7 +18,7 @@ import np.gov.lgcpd.database.DatabaseHandler;
 /**
  * Created by asis on 12/2/16.
  */
-public class LSPDetailActivity extends AppCompatActivity {
+public class FavouriteLSPDetailActivity extends AppCompatActivity {
 
     Toolbar toolbar;
 
@@ -36,20 +31,6 @@ public class LSPDetailActivity extends AppCompatActivity {
             chairmanEmail,
             remarks;
 
-    private LSPDetail details;
-//
-//    name
-//    address
-//    officePhone,
-//    contactPerson,
-//    chairman,
-//    contactEmail,
-//    contactPhone,
-//    contactMobile,
-//    chairmanMobile,
-//    chairmanEmail,
-//    remark
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,7 +39,7 @@ public class LSPDetailActivity extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("LSP");
+        getSupportActionBar().setTitle("Favourite -LSP");
 
         id = getIntent().getStringExtra("id");
 
@@ -82,15 +63,14 @@ public class LSPDetailActivity extends AppCompatActivity {
     }
 
     public void filTheInformation(){
-        String URL = Constants.LSP_DETAIL_API + id ;
 
-        new GetDetailsOfSM().execute(URL);
+        new GetDetailsOfSM().execute();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_detail, menu);
+        getMenuInflater().inflate(R.menu.favourite_menu, menu);
 
         return true;
     }
@@ -104,13 +84,10 @@ public class LSPDetailActivity extends AppCompatActivity {
             finish();
         }
 
-        if (id == R.id.action_favourite){
+        if (id == R.id.action_delete){
             DatabaseHandler handler = new DatabaseHandler(getApplicationContext(), Constants.DATABASE_NAME, null, Constants.DATABASE_VERSION);
-            if(handler.addLSP(details))
-                Toast.makeText(getApplicationContext(),"Added to favourite.",Toast.LENGTH_SHORT).show();
-            else
-                Toast.makeText(getApplicationContext(),"Already in database",Toast.LENGTH_SHORT).show();
-
+            handler.deleteLSP(this.id);
+            finish();
         }
 
         return super.onOptionsItemSelected(item);
@@ -124,53 +101,17 @@ public class LSPDetailActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            pd = new ProgressDialog(LSPDetailActivity.this);
+            pd = new ProgressDialog(FavouriteLSPDetailActivity.this);
             pd.setTitle("Getting data from Server");
             pd.setMessage("Connecting to server");
             pd.setCancelable(false);
             pd.show();
         }
 
-        private LSPDetail createLSPDetailObject(JSONObject jo){
-            try {
-                String id = jo.getString("id");
-                String name = jo.getString("name");
-                String address = jo.getString("address");
-                String officePhone = jo.getString("office_phone");
-                String contactPerson = jo.getString("contact_person");
-                String chairman = jo.getString("chairman");
-                String contactEmail = jo.getString("contact_email");
-                String contactPhone = jo.getString("contact_phone");
-                String contactMobile = jo.getString("contact_mobile");
-                String chairmanMobile = jo.getString("chairman_mobile");
-                String chairmanEmail = jo.getString("chairman_email");
-                String remark = jo.getString("remarks");
-
-
-                details = new LSPDetail(id,
-                        name,
-                        address,
-                        officePhone,
-                        contactPerson,
-                        chairman,
-                        contactEmail,
-                        contactPhone,
-                        contactMobile,
-                        chairmanMobile,
-                        chairmanEmail,
-                        remark
-                );
-
-                return details;
-
-            }catch (JSONException ex){ex.printStackTrace();}
-
-            return null;
-        }
-
         @Override
         protected LSPDetail doInBackground(String... params) {
-            return createLSPDetailObject(NetworkHelper.getJSONObjectFromUrlUsingGet(params[0]));
+            DatabaseHandler handler = new DatabaseHandler(getApplicationContext(), Constants.DATABASE_NAME, null, Constants.DATABASE_VERSION);
+            return handler.getLSP(id);
         }
 
         @Override
@@ -191,7 +132,4 @@ public class LSPDetailActivity extends AppCompatActivity {
             pd.cancel();
         }
     }
-
-
-
 }

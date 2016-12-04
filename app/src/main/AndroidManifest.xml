@@ -26,8 +26,9 @@
         <activity android:name=".LSP.LSPListActivity"/>
         <activity android:name=".SM.SMDetailActivity"/>
         <activity android:name=".LSP.LSPDetailActivity"/>
-        <activity android:name=".favourite.FavouriteDetailActivity"/>
+        <activity android:name=".favourite.FavouriteSMDetailActivity"/>
         <activity android:name=".favourite.FavouriteListActivity"/>
+        <activity android:name=".favourite.FavouriteLSPDetailActivity"/>
     </application>
 
 </manifest>

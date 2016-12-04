@@ -8,23 +8,16 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.List;
 
 import np.gov.lgcpd.AdaptersAndModel.SMDetails;
 import np.gov.lgcpd.Helper.Constants;
-import np.gov.lgcpd.Helper.NetworkHelper;
 import np.gov.lgcpd.R;
 import np.gov.lgcpd.database.DatabaseHandler;
 
 /**
  * Created by asis on 12/4/16.
  */
-public class FavouriteDetailActivity extends AppCompatActivity {
+public class FavouriteSMDetailActivity extends AppCompatActivity {
 
     Toolbar toolbar;
 
@@ -111,7 +104,7 @@ public class FavouriteDetailActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            pd = new ProgressDialog(FavouriteDetailActivity.this);
+            pd = new ProgressDialog(FavouriteSMDetailActivity.this);
             pd.setTitle("Getting data from Database");
             pd.setMessage("Connecting to Database");
             pd.setCancelable(false);

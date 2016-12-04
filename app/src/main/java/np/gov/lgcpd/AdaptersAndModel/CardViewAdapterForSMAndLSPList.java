@@ -14,7 +14,8 @@ import java.util.List;
 import np.gov.lgcpd.LSP.LSPDetailActivity;
 import np.gov.lgcpd.R;
 import np.gov.lgcpd.SM.SMDetailActivity;
-import np.gov.lgcpd.favourite.FavouriteDetailActivity;
+import np.gov.lgcpd.favourite.FavouriteLSPDetailActivity;
+import np.gov.lgcpd.favourite.FavouriteSMDetailActivity;
 
 /**
  * Created by asis on 11/30/16.
@@ -51,7 +52,11 @@ public class CardViewAdapterForSMAndLSPList extends RecyclerView.Adapter<CardVie
                         else
                             i = new Intent(context,LSPDetailActivity.class);
                     }else{
-                        i = new Intent(context,FavouriteDetailActivity.class);
+
+                        if(isSM)
+                            i = new Intent(context,FavouriteSMDetailActivity.class);
+                        else
+                            i = new Intent(context,FavouriteLSPDetailActivity.class);
                     }
 
                     context.startActivity(i
