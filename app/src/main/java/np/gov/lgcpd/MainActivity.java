@@ -42,6 +42,7 @@ import np.gov.lgcpd.Helper.Constants;
 import np.gov.lgcpd.Helper.NetworkHelper;
 import np.gov.lgcpd.AdaptersAndModel.ModelForCardDistrictMunicipality;
 import np.gov.lgcpd.Login.LoginActivity;
+import np.gov.lgcpd.favourite.FavouriteListActivity;
 
 /**
  * Created by asis on 11/6/16.
@@ -110,6 +111,18 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                 int id = item.getItemId();
                 switch (id){
 
+                    case R.id.nav_admin:
+                        Toast.makeText(MainActivity.this,"Admin panel will have some admin functionality like adding and editing the SM and LSP ",Toast.LENGTH_SHORT).show();
+                        break;
+
+                    case R.id.nav_fav:
+                        startActivity(new Intent(MainActivity.this, FavouriteListActivity.class));
+                        break;
+
+                    case R.id.nav_save_offline:
+                        Toast.makeText(MainActivity.this,"No internet Connection? No problem! We will soon cover you. Stay tuned.",Toast.LENGTH_SHORT).show();
+                        break;
+
                     case R.id.nav_lsp:
                         valueThatStoreLSPorSM = Constants.LSP;
                         leftNavigationView.getMenu().findItem(R.id.nav_lsp).setVisible(false);
@@ -128,9 +141,6 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
                     case R.id.nav_login:
                         startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                        //item.setVisible(false);
-
-                       // leftNavigationView.getMenu().findItem(R.id.nav_logout).setVisible(true);
                         break;
                     case R.id.nav_logout:
                         userLogout();
@@ -182,6 +192,14 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                         chaneTheVisibilityOfSelectedField(rightNavigationView);
                         Toast.makeText(MainActivity.this,"Other is not completed, Comming Soon",Toast.LENGTH_SHORT).show();
                         item.setVisible(false);
+                        break;
+
+                    case R.id.nav_help:
+                        Toast.makeText(MainActivity.this,"Help !!! page to show how to use app",Toast.LENGTH_SHORT).show();
+                        break;
+
+                    case R.id.nav_about:
+                        Toast.makeText(MainActivity.this,"About us.",Toast.LENGTH_SHORT).show();
                         break;
                 }
 

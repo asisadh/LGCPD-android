@@ -14,6 +14,7 @@ import java.util.List;
 
 import np.gov.lgcpd.R;
 import np.gov.lgcpd.SM.SMDetailActivity;
+import np.gov.lgcpd.favourite.FavouriteDetailActivity;
 
 /**
  * Created by asis on 11/30/16.
@@ -23,6 +24,8 @@ public class CardViewAdapterForSMList extends RecyclerView.Adapter<CardViewAdapt
     private Context context;
     private List<SM> list;
     private List<SM> originalList;
+
+    private boolean isFromFavourite;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView name;
@@ -39,11 +42,17 @@ public class CardViewAdapterForSMList extends RecyclerView.Adapter<CardViewAdapt
 
             view.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {
-                    Toast.makeText(context,"View Clicked = " + list.get(getAdapterPosition()).getName(),Toast.LENGTH_LONG).show();
-                    context.startActivity(new Intent(context, SMDetailActivity.class)
-                            .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                            .putExtra("id",list.get(getAdapterPosition()).getId())
-                    );
+                    if(!isFromFavourite){
+                        context.startActivity(new Intent(context, SMDetailActivity.class)
+                                .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                .putExtra("id",list.get(getAdapterPosition()).getId())
+                        );
+                    }else{
+                        context.startActivity(new Intent(context, FavouriteDetailActivity.class)
+                                .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                .putExtra("id",list.get(getAdapterPosition()).getId())
+                        );
+                    }
                 }
             });
         }
@@ -56,6 +65,12 @@ public class CardViewAdapterForSMList extends RecyclerView.Adapter<CardViewAdapt
         this.originalList = new ArrayList<SM>();
 
         originalList.addAll(this.list);
+
+        isFromFavourite = false;
+    }
+
+    public void setFromFavourite(boolean b){
+        isFromFavourite = b;
     }
 
     @Override

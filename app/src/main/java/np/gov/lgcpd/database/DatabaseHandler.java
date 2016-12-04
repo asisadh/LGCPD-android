@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import java.util.ArrayList;
 import java.util.List;
 
+import np.gov.lgcpd.AdaptersAndModel.SM;
 import np.gov.lgcpd.AdaptersAndModel.SMDetails;
 
 /**
@@ -66,35 +67,54 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void addSM(SMDetails sm){
-        SQLiteDatabase db = this.getReadableDatabase();
+    public boolean addSM(SMDetails sm){
+        SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
-        values.put("id_remote", sm.getId());
-        values.put("name",sm.getName());
-        values.put("email",sm.getEmail());
-        values.put("img_name",sm.getImg_name());
-        values.put("phone",sm.getPhone());
-        values.put("address",sm.getAddress());
-        values.put("lsp_id",sm.getLsp_id());
-        values.put("hired",sm.getHired());
-        values.put( "vdc",sm.getVdc());
-        values.put("sex",sm.getSex());
-        values.put( "dalit",sm.getDalit());
-        values.put( "janajati",sm.getJanajati());
-        values.put( "dag",sm.getDag());
-        values.put( "education",sm.getEducation());
-        values.put( "work_experience",sm.getWork_experience());
-        values.put( "belong_to",sm.getBelong_to());
-        values.put( "tranning",sm.getTraining());
-        values.put( "entry_date",sm.getEntry_date());
-        values.put("last_modified_date",sm.getLast_date_modify());
-        values.put("remarks",sm.getRemarks());
-        values.put("district_id",sm.getDistrict_id());
-        values.put("type",sm.getType());
+        String Query = "Select * from " + TABLE_NAME_SM + " where " + "id_remote" + " = " + sm.getId();
+        Cursor cursor = db.rawQuery(Query, null);
 
-        db.insert(TABLE_NAME_SM, null, values);
-        db.close();
+        if(cursor.getCount() <= 0){
+
+            values.put("id_remote", sm.getId());
+            values.put("name",sm.getName());
+            values.put("email",sm.getEmail());
+            values.put("img_name",sm.getImg_name());
+            values.put("phone",sm.getPhone());
+            values.put("address",sm.getAddress());
+            values.put("lsp_id",sm.getLsp_id());
+            values.put("hired",sm.getHired());
+            values.put( "vdc",sm.getVdc());
+            values.put("sex",sm.getSex());
+            values.put( "dalit",sm.getDalit());
+            values.put( "janajati",sm.getJanajati());
+            values.put( "dag",sm.getDag());
+            values.put( "education",sm.getEducation());
+            values.put( "work_experience",sm.getWork_experience());
+            values.put( "belong_to",sm.getBelong_to());
+            values.put( "tranning",sm.getTraining());
+            values.put( "entry_date",sm.getEntry_date());
+            values.put("last_modified_date",sm.getLast_date_modify());
+            values.put("remarks",sm.getRemarks());
+            values.put("district_id",sm.getDistrict_id());
+            values.put("type",sm.getType());
+
+            db.insert(TABLE_NAME_SM, null, values);
+            db.close();
+
+            cursor.close();
+            return true;
+        }
+        cursor.close();
+        return false;
+
+    }
+
+    public boolean deleteSM(int id){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        return db.delete(TABLE_NAME_SM, "id_remote" + "=" + id, null) > 0;
+
     }
 
     public SMDetails getSM(String id){
@@ -142,42 +162,25 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return d;
     }
 
-    public List<SMDetails> getAllSM(){
-        List<SMDetails> list = new ArrayList<SMDetails>();
+    public List<SM> getAllSM(){
+        List<SM> list = new ArrayList<SM>();
         // Select All Query
-        String selectQuery = "SELECT  * FROM " + TABLE_NAME_SM ;
+        String selectQuery = "SELECT  id_remote,name,phone,address,vdc FROM " + TABLE_NAME_SM ;
         //+ "Where subject =" + subject;
 
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
 
         // looping through all rows and adding to list
         if (cursor.moveToFirst()) {
             do {
-                SMDetails d = new SMDetails();
+                SM d = new SM();
 
-                d.setId(cursor.getString(1));
-                d.setName(cursor.getString(2));
-                d.setEmail(cursor.getString(3));
-                d.setImg_name(cursor.getString(4));
-                d.setPhone(cursor.getString(5));
-                d.setAddress(cursor.getString(6));
-                d.setLsp_id(cursor.getString(7));
-                d.setHired(cursor.getString(8));
-                d.setVdc(cursor.getString(9));
-                d.setSex(cursor.getString(10));
-                d.setDalit(cursor.getString(11));
-                d.setJanajati(cursor.getString(12));
-                d.setDag(cursor.getString(13));
-                d.setEducation(cursor.getString(14));
-                d.setWork_experience(cursor.getString(15));
-                d.setBelong_to(cursor.getString(16));
-                d.setTraining(cursor.getString(17));
-                d.setEntry_date(cursor.getString(18));
-                d.setLast_date_modify(cursor.getString(19));
-                d.setRemarks(cursor.getString(20));
-                d.setDistrict_id(cursor.getString(21));
-                d.setType(cursor.getString(22));
+                d.setId(cursor.getString(0));
+                d.setName(cursor.getString(1));
+                d.setPhone(cursor.getString(2));
+                d.setAddress(cursor.getString(3));
+                d.setVdc_ward(cursor.getString(4));
 
                 // Adding contact to list
                 list.add(d);

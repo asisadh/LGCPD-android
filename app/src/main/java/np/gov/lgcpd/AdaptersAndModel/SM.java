@@ -11,6 +11,10 @@ public class SM {
     private String address;
     private String vdc_ward;
 
+    public SM(){
+
+    }
+
     public SM(String id, String name, String phone, String address, String vdc_ward) {
         this.id = id;
         this.name = name;
