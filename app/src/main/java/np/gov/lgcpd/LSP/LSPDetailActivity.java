@@ -85,7 +85,7 @@ public class LSPDetailActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.sm_detail_menu, menu);
+        //getMenuInflater().inflate(R.menu.menu_detail, menu);
 
         return true;
     }
@@ -97,6 +97,10 @@ public class LSPDetailActivity extends AppCompatActivity {
 
         if (id==android.R.id.home) {
             finish();
+        }
+
+        if (id == R.id.action_favourite){
+            //store in database
         }
 
         return super.onOptionsItemSelected(item);

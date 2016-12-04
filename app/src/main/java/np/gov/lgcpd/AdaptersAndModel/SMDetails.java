@@ -28,6 +28,8 @@ public class SMDetails {
     private String district_id;
     private String type;
 
+    public SMDetails(){}
+
     public SMDetails(String id, String name, String email, String img_name, String phone, String address, String lsp_id, String hired, String vdc, String sex, String dalit, String janajati, String dag, String education, String work_experience, String belong_to, String training, String entry_date, String last_date_modify, String remarks, String district_id, String type) {
         this.id = id;
         this.name = name;
@@ -139,5 +141,93 @@ public class SMDetails {
 
     public String getType() {
         return type;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setImg_name(String img_name) {
+        this.img_name = img_name;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public void setLsp_id(String lsp_id) {
+        this.lsp_id = lsp_id;
+    }
+
+    public void setHired(String hired) {
+        this.hired = hired;
+    }
+
+    public void setVdc(String vdc) {
+        this.vdc = vdc;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
+
+    public void setDalit(String dalit) {
+        this.dalit = dalit;
+    }
+
+    public void setJanajati(String janajati) {
+        this.janajati = janajati;
+    }
+
+    public void setDag(String dag) {
+        this.dag = dag;
+    }
+
+    public void setEducation(String education) {
+        this.education = education;
+    }
+
+    public void setWork_experience(String work_experience) {
+        this.work_experience = work_experience;
+    }
+
+    public void setBelong_to(String belong_to) {
+        this.belong_to = belong_to;
+    }
+
+    public void setTraining(String training) {
+        this.training = training;
+    }
+
+    public void setEntry_date(String entry_date) {
+        this.entry_date = entry_date;
+    }
+
+    public void setLast_date_modify(String last_date_modify) {
+        this.last_date_modify = last_date_modify;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
+    }
+
+    public void setDistrict_id(String district_id) {
+        this.district_id = district_id;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

@@ -245,8 +245,13 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     @Override
     protected void onResume() {
         super.onResume();
+        ProgressDialog pd = new ProgressDialog(MainActivity.this);
+        pd.setTitle("LGCPD");
+        pd.setMessage("Making User Space");
+        pd.show();
         checkIfUserIsAlreadyLoggedIn();
         populateTheList(areaOfSMorLSPToFetchFrom);
+        pd.cancel();
     }
 
     public void userLogout(){

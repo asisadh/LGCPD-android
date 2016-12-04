@@ -5,6 +5,10 @@ package np.gov.lgcpd.Helper;
  */
 public class Constants {
 
+    public static final String DATABASE_NAME = "LGCPD.db";
+    public static final int DATABASE_VERSION = 1;
+
+
     public static String BASE_URL = "http://api.dev/public/";
     //public static String BASE_URL = "http://sanzay.com.np/lgcpd/public/";
 
