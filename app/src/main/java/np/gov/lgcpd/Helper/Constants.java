@@ -9,8 +9,8 @@ public class Constants {
     public static final int DATABASE_VERSION = 1;
 
 
-    public static String BASE_URL = "http://api.dev/public/";
-    //public static String BASE_URL = "http://sanzay.com.np/lgcpd/public/";
+    //public static String BASE_URL = "http://api.dev/public/";
+    public static String BASE_URL = "http://sanzay.com.np/lgcpd/public/";
 
     public static String LOGIN_URL = BASE_URL + "login";
 
@@ -24,7 +24,6 @@ public class Constants {
 
 
     public static String SHARED_PREFRENCE_LOGIN_INFORMATION = "LGCPD_USER";
-    public static String SHARED_PREFRENCE_SPLASH_INFORMATION = "LGCPD_SPLASH";
 
     public static String DISTRICT_VALUE = "district";
     public static String MUNICIPALITY_VALUE = "munic";

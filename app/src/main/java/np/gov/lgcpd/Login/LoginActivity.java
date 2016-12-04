@@ -50,7 +50,11 @@ public class LoginActivity extends AppCompatActivity{
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startLogin();
+                if(NetworkHelper.isNetworkAvailable(getApplicationContext())){
+                    startLogin();
+                }else{
+                    Toast.makeText(getApplicationContext(),"No Internet Connection",Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }

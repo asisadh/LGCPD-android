@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -75,7 +76,13 @@ public class SMDetailActivity extends AppCompatActivity {
     public void filTheInformation(){
         String URL = Constants.SM_DETAIL_API + id ;
 
-        new GetDetailsOfSM().execute(URL);
+        if(NetworkHelper.isNetworkAvailable(getApplicationContext())){
+            new GetDetailsOfSM().execute(URL);
+        }else{
+            Toast.makeText(getApplicationContext(),"No Internet Connection",Toast.LENGTH_SHORT).show();
+        }
+
+
     }
 
     @Override
