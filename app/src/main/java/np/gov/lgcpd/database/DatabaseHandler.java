@@ -110,7 +110,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     }
 
-    public boolean deleteSM(int id){
+    public boolean deleteSM(String id){
         SQLiteDatabase db = this.getWritableDatabase();
 
         return db.delete(TABLE_NAME_SM, "id_remote" + "=" + id, null) > 0;

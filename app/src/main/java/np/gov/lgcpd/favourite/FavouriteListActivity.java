@@ -14,7 +14,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import np.gov.lgcpd.AdaptersAndModel.CardViewAdapterForSMAndLSPList;
@@ -32,7 +31,6 @@ public class FavouriteListActivity extends AppCompatActivity implements SearchVi
 
     private RecyclerView recyclerView;
     private CardViewAdapterForSMAndLSPList adapter;
-    private List<SM> list;
 
    // private String value;
 
@@ -63,8 +61,6 @@ public class FavouriteListActivity extends AppCompatActivity implements SearchVi
     }
 
     private void populateTheList(){
-        list = new ArrayList<>();
-
         new GetSM().execute();
     }
 
@@ -99,6 +95,11 @@ public class FavouriteListActivity extends AppCompatActivity implements SearchVi
         return true;
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        new GetSM().execute();
+    }
 
     @Override
     public boolean onQueryTextSubmit(String query) {
@@ -118,7 +119,6 @@ public class FavouriteListActivity extends AppCompatActivity implements SearchVi
             pd.setCancelable(false);
             pd.show();
         }
-
 
         @Override
         protected List<SM> doInBackground(String... params) {

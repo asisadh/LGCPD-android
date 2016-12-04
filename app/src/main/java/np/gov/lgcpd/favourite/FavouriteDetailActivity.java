@@ -8,6 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -94,6 +95,9 @@ public class FavouriteDetailActivity extends AppCompatActivity {
 
         if (id == R.id.action_delete){
             //delete from database
+            DatabaseHandler handler = new DatabaseHandler(getApplicationContext(), Constants.DATABASE_NAME, null, Constants.DATABASE_VERSION);
+            handler.deleteSM(this.id);
+            finish();
         }
 
         return super.onOptionsItemSelected(item);
