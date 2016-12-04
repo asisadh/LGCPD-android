@@ -24,7 +24,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import np.gov.lgcpd.AdaptersAndModel.CardViewAdapterForSMList;
+import np.gov.lgcpd.AdaptersAndModel.CardViewAdapterForSMAndLSPList;
 import np.gov.lgcpd.AdaptersAndModel.SM;
 import np.gov.lgcpd.Helper.Constants;
 import np.gov.lgcpd.Helper.NetworkHelper;
@@ -41,7 +41,7 @@ public class SMListActivity extends AppCompatActivity implements SearchView.OnQu
     private Button refresh;
 
     private RecyclerView recyclerView;
-    private CardViewAdapterForSMList adapter;
+    private CardViewAdapterForSMAndLSPList adapter;
     private List<SM> list;
 
     private String value;
@@ -55,6 +55,7 @@ public class SMListActivity extends AppCompatActivity implements SearchView.OnQu
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("SM");
 
         no_network_connection = (LinearLayout) findViewById(R.id.no_network_connection);
         refresh = (Button) findViewById(R.id.refresh);
@@ -178,7 +179,8 @@ public class SMListActivity extends AppCompatActivity implements SearchView.OnQu
                     }catch (JSONException ex){ ex.printStackTrace();}
                 }
 
-            adapter = new CardViewAdapterForSMList(getApplicationContext(), list);
+            adapter = new CardViewAdapterForSMAndLSPList(getApplicationContext(), list);
+            adapter.isSM(true);
             recyclerView.setAdapter(adapter);
 
             pd.cancel();

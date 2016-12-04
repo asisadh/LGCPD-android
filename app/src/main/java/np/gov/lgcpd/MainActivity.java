@@ -72,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("SM");
 
         no_network_connection = (LinearLayout) findViewById(R.id.no_network_connection);
         refresh = (Button) findViewById(R.id.refresh);
@@ -124,6 +125,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                         break;
 
                     case R.id.nav_lsp:
+                        getSupportActionBar().setTitle("LSP");
                         valueThatStoreLSPorSM = Constants.LSP;
                         leftNavigationView.getMenu().findItem(R.id.nav_lsp).setVisible(false);
                         leftNavigationView.getMenu().findItem(R.id.nav_sm).setVisible(true);
@@ -132,6 +134,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                         break;
 
                     case R.id.nav_sm:
+                        getSupportActionBar().setTitle("SM");
                         valueThatStoreLSPorSM = Constants.SM;
                         leftNavigationView.getMenu().findItem(R.id.nav_lsp).setVisible(true);
                         leftNavigationView.getMenu().findItem(R.id.nav_sm).setVisible(false);
@@ -263,13 +266,8 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     @Override
     protected void onResume() {
         super.onResume();
-        ProgressDialog pd = new ProgressDialog(MainActivity.this);
-        pd.setTitle("LGCPD");
-        pd.setMessage("Making User Space");
-        pd.show();
         checkIfUserIsAlreadyLoggedIn();
         populateTheList(areaOfSMorLSPToFetchFrom);
-        pd.cancel();
     }
 
     public void userLogout(){

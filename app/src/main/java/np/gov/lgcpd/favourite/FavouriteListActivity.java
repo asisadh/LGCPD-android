@@ -12,18 +12,14 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import np.gov.lgcpd.AdaptersAndModel.CardViewAdapterForSMList;
+import np.gov.lgcpd.AdaptersAndModel.CardViewAdapterForSMAndLSPList;
 import np.gov.lgcpd.AdaptersAndModel.SM;
 import np.gov.lgcpd.Helper.Constants;
-import np.gov.lgcpd.Helper.NetworkHelper;
 import np.gov.lgcpd.R;
 import np.gov.lgcpd.database.DatabaseHandler;
 
@@ -35,7 +31,7 @@ public class FavouriteListActivity extends AppCompatActivity implements SearchVi
     private Toolbar toolbar;
 
     private RecyclerView recyclerView;
-    private CardViewAdapterForSMList adapter;
+    private CardViewAdapterForSMAndLSPList adapter;
     private List<SM> list;
 
    // private String value;
@@ -48,6 +44,7 @@ public class FavouriteListActivity extends AppCompatActivity implements SearchVi
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("Favourite -SM");
 
         setRecycleView();
     }
@@ -137,7 +134,7 @@ public class FavouriteListActivity extends AppCompatActivity implements SearchVi
                 Toast.makeText(getApplicationContext(),"Sorry no favourite right now",Toast.LENGTH_SHORT).show();
             }
             else {
-                adapter = new CardViewAdapterForSMList(getApplicationContext(), list);
+                adapter = new CardViewAdapterForSMAndLSPList(getApplicationContext(), list);
                 adapter.setFromFavourite(true);
                 recyclerView.setAdapter(adapter);
             }

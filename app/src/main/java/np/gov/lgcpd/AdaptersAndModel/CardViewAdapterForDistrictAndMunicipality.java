@@ -37,22 +37,21 @@ public class CardViewAdapterForDistrictAndMunicipality extends RecyclerView.Adap
 
             view.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {
+
+                    Intent i = null;
+
                     if(sm_lsp.equals(Constants.SM)) {
-                        context.startActivity(new Intent(context, SMListActivity.class)
-                                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                                .putExtra("value", area)
-                                .putExtra("name", list.get(getAdapterPosition()).getName()));
+                        i = new Intent(context, SMListActivity.class);
                     }else{
-                        context.startActivity(new Intent(context,LSPListActivity.class)
-                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                            .putExtra("value",area)
-                            .putExtra("name",list.get(getAdapterPosition()).getName()));
-                        Toast.makeText(context,"this is LSP",Toast.LENGTH_SHORT).show();
+                        i = new Intent(context, LSPListActivity.class);
                     }
+                    context.startActivity(i
+                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                            .putExtra("value", area)
+                            .putExtra("name", list.get(getAdapterPosition()).getName()));
                 }
             });
         }
-
     }
 
     public void setArea(String s){

@@ -42,6 +42,7 @@ public class FavouriteDetailActivity extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("Favourite -SM");
 
         id = getIntent().getStringExtra("id");
 

@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,21 +14,19 @@ import java.util.List;
 import np.gov.lgcpd.LSP.LSPDetailActivity;
 import np.gov.lgcpd.R;
 import np.gov.lgcpd.SM.SMDetailActivity;
+import np.gov.lgcpd.favourite.FavouriteDetailActivity;
 
 /**
  * Created by asis on 11/30/16.
  */
-public class CardViewAdapterForLSPList extends RecyclerView.Adapter<CardViewAdapterForLSPList.ViewHolder> {
-
-
-    /**
-     *
-     * View Of SM are used as they are just place holder
-     * */
+public class CardViewAdapterForSMAndLSPList extends RecyclerView.Adapter<CardViewAdapterForSMAndLSPList.ViewHolder> {
 
     private Context context;
     private List<SM> list;
     private List<SM> originalList;
+
+    private boolean isFromFavourite;
+    private boolean isSM;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView name;
@@ -46,8 +43,18 @@ public class CardViewAdapterForLSPList extends RecyclerView.Adapter<CardViewAdap
 
             view.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {
-                    Toast.makeText(context,"View Clicked = " + list.get(getAdapterPosition()).getName(),Toast.LENGTH_LONG).show();
-                    context.startActivity(new Intent(context, LSPDetailActivity.class)
+
+                    Intent i = null ;
+                    if(!isFromFavourite){
+                        if(isSM)
+                            i = new Intent(context,SMDetailActivity.class);
+                        else
+                            i = new Intent(context,LSPDetailActivity.class);
+                    }else{
+                        i = new Intent(context,FavouriteDetailActivity.class);
+                    }
+
+                    context.startActivity(i
                             .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                             .putExtra("id",list.get(getAdapterPosition()).getId())
                     );
@@ -57,12 +64,22 @@ public class CardViewAdapterForLSPList extends RecyclerView.Adapter<CardViewAdap
 
     }
 
-    public CardViewAdapterForLSPList(Context context, List<SM> list) {
+    public CardViewAdapterForSMAndLSPList(Context context, List<SM> list) {
         this.context = context;
         this.list = list;
         this.originalList = new ArrayList<SM>();
 
         originalList.addAll(this.list);
+
+        isFromFavourite = false;
+    }
+
+    public void setFromFavourite(boolean b){
+        isFromFavourite = b;
+    }
+
+    public void isSM(Boolean b){
+        isSM = b;
     }
 
     @Override

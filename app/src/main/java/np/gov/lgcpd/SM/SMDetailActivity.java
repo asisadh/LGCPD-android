@@ -43,6 +43,7 @@ public class SMDetailActivity extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("SM");
 
         id = getIntent().getStringExtra("id");
 
