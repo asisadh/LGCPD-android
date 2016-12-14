@@ -2,9 +2,15 @@ package np.gov.lgcpd.database;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
+
+
+//import android.database.Cursor;
+import net.sqlcipher.database.SQLiteDatabase;
+import net.sqlcipher.database.SQLiteOpenHelper;
+import net.sqlcipher.Cursor;
+
+//import android.database.sqlite.SQLiteDatabase;
+//import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +18,7 @@ import java.util.List;
 import np.gov.lgcpd.AdaptersAndModel.LSPDetail;
 import np.gov.lgcpd.AdaptersAndModel.SM;
 import np.gov.lgcpd.AdaptersAndModel.SMDetails;
+import np.gov.lgcpd.Helper.Constants;
 
 /**
  * Created by asis on 12/2/16.
@@ -24,12 +31,18 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String TEXT_TYPE = " TEXT";
     private static final String COMMA_SEP = ",";
 
+    private Context context;
+
     public DatabaseHandler(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context,name,factory,version);
+       this.context = context;
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+
+        SQLiteDatabase.loadLibs(context);
+
         String CREATE_SM_TABLE = "CREATE TABLE " + TABLE_NAME_SM + "("
                 + "id" + " INTEGER PRIMARY KEY,"
                 +"id_remote" + TEXT_TYPE + COMMA_SEP
@@ -78,6 +91,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+
+        SQLiteDatabase.loadLibs(context);
         // Drop older table if existed
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_SM);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_LSP);
@@ -87,7 +102,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     public boolean addSM(SMDetails sm){
-        SQLiteDatabase db = this.getWritableDatabase();
+
+        SQLiteDatabase.loadLibs(context);
+
+        SQLiteDatabase db = this.getWritableDatabase(Constants.DATABASE_PASSWORD);
         ContentValues values = new ContentValues();
 
         String Query = "Select * from " + TABLE_NAME_SM + " where " + "id_remote" + " = " + sm.getId();
@@ -126,18 +144,23 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         }
         cursor.close();
         return false;
-
     }
 
     public boolean deleteSM(String id){
-        SQLiteDatabase db = this.getWritableDatabase();
+
+        SQLiteDatabase.loadLibs(context);
+
+        SQLiteDatabase db = this.getWritableDatabase(Constants.DATABASE_PASSWORD);
 
         return db.delete(TABLE_NAME_SM, "id_remote" + "=" + id, null) > 0;
 
     }
 
     public boolean addLSP(LSPDetail lsp){
-        SQLiteDatabase db = this.getWritableDatabase();
+
+        SQLiteDatabase.loadLibs(context);
+
+        SQLiteDatabase db = this.getWritableDatabase(Constants.DATABASE_PASSWORD);
         ContentValues values = new ContentValues();
 
         String Query = "Select * from " + TABLE_NAME_LSP + " where " + "id_remote" + " = " + lsp.getId();
@@ -170,14 +193,20 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     public boolean deleteLSP(String id){
-        SQLiteDatabase db = this.getWritableDatabase();
+
+        SQLiteDatabase.loadLibs(context);
+
+        SQLiteDatabase db = this.getWritableDatabase(Constants.DATABASE_PASSWORD);
 
         return db.delete(TABLE_NAME_LSP, "id_remote" + "=" + id, null) > 0;
 
     }
 
     public SMDetails getSM(String id){
-        SQLiteDatabase db = this.getReadableDatabase();
+
+        SQLiteDatabase.loadLibs(context);
+
+        SQLiteDatabase db = this.getReadableDatabase(Constants.DATABASE_PASSWORD);
 
         Cursor cursor = db.query(TABLE_NAME_SM,
                 new String[] {   "id",
@@ -222,7 +251,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     public LSPDetail getLSP(String id){
-        SQLiteDatabase db = this.getReadableDatabase();
+
+        SQLiteDatabase.loadLibs(context);
+
+        SQLiteDatabase db = this.getReadableDatabase(Constants.DATABASE_PASSWORD);
 
         Cursor cursor = db.query(TABLE_NAME_LSP,
                 new String[] {   "id",
@@ -254,12 +286,15 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     public List<SM> getAllSM(){
+
+        SQLiteDatabase.loadLibs(context);
+
         List<SM> list = new ArrayList<SM>();
         // Select All Query
         String selectQuery = "SELECT  id_remote,name,phone,address,vdc FROM " + TABLE_NAME_SM ;
         //+ "Where subject =" + subject;
 
-        SQLiteDatabase db = this.getReadableDatabase();
+        SQLiteDatabase db = this.getReadableDatabase(Constants.DATABASE_PASSWORD);
         Cursor cursor = db.rawQuery(selectQuery, null);
 
         // looping through all rows and adding to list
@@ -285,12 +320,15 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     public List<SM> getAllLSP(){
+
+        SQLiteDatabase.loadLibs(context);
+
         List<SM> list = new ArrayList<SM>();
         // Select All Query
         String selectQuery = "SELECT  id_remote,name,office_phone,address,contact_email FROM " + TABLE_NAME_LSP ;
         //+ "Where subject =" + subject;
 
-        SQLiteDatabase db = this.getReadableDatabase();
+        SQLiteDatabase db = this.getReadableDatabase(Constants.DATABASE_PASSWORD);
         Cursor cursor = db.rawQuery(selectQuery, null);
 
         // looping through all rows and adding to list

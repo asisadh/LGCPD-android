@@ -103,11 +103,13 @@ public class SMDetailActivity extends AppCompatActivity {
         }
 
         if (id == R.id.action_favourite){
+
             DatabaseHandler handler = new DatabaseHandler(getApplicationContext(), Constants.DATABASE_NAME, null, Constants.DATABASE_VERSION);
             if(handler.addSM(details))
                 Toast.makeText(getApplicationContext(),"Added to favourite.",Toast.LENGTH_SHORT).show();
             else
                 Toast.makeText(getApplicationContext(),"Already in database",Toast.LENGTH_SHORT).show();
+
         }
 
         return super.onOptionsItemSelected(item);

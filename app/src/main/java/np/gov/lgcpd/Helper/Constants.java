@@ -32,4 +32,5 @@ public class Constants {
     public static String LSP = "lsp";
 
     public static String SHARED_PREFRENCE_PASSWORD = "bvRL9M1Td3uucVDr";
+    public static String DATABASE_PASSWORD = "4UX57cSFt35NLTrq";
 }
